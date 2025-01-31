@@ -17,15 +17,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -39,6 +37,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final TextEditingController _name = TextEditingController();
   final TextEditingController _phoneNumber = TextEditingController();
+
+  void _addContact() {
+    if (_name.text.isNotEmpty && _phoneNumber.text.isNotEmpty) {
+      setState(() {
+        contacts.insert(0, {
+          'name': _name.text,
+          'number': _phoneNumber.text,
+        });
+        _name.clear();
+        _phoneNumber.clear();
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Fields cannot be empty'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,25 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                onPressed: () {
-                  if (_name.text.isNotEmpty && _phoneNumber.text.isNotEmpty) {
-                    setState(() {
-                      contacts.insert(0, {
-                        'name': _name.text,
-                        'number': _phoneNumber.text,
-                      });
-                      _name.clear();
-                      _phoneNumber.clear();
-                    });
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Fields cannot be empty'),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                },
+                onPressed: _addContact,
                 child: const Text('Add'),
               ),
             ),
@@ -115,7 +115,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       Navigator.pop(context);
                     },
                   );
-                  ;
                 },
               ),
             )
