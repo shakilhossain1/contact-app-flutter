@@ -1,3 +1,4 @@
+import 'package:contact_app/contact_item.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -31,7 +32,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   var contacts = [
     {'name': 'Shakil', 'number': '0130559393'},
     {'name': 'Alice', 'number': '0123456789'},
@@ -106,74 +106,16 @@ class _MyHomePageState extends State<MyHomePage> {
               child: ListView.builder(
                 itemCount: contacts.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onLongPress: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Confirmation'),
-                            content: const Text('Are you sure for delete?'),
-                            actions: [
-                              TextButton.icon(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                               label: const Text('Cancel'),
-                                icon: const Icon(Icons.cancel_outlined),
-                              ),
-                              TextButton.icon(
-                                onPressed: () {
-                                  setState(() {
-                                    contacts.removeAt(index);
-                                  });
-                                  Navigator.pop(context);
-                                },
-                                label: const Text('Delete'),
-                                icon: const Icon(Icons.delete),
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                  return ContactItem(
+                    contact: contacts[index],
+                    onDelete: () {
+                      setState(() {
+                        contacts.removeAt(index);
+                      });
+                      Navigator.pop(context);
                     },
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        border: Border.all(color: Colors.grey[300]!),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Row(
-                              children: [
-                                const Icon(Icons.person),
-                                const SizedBox(width: 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      contacts[index]['name']!,
-                                      style: const TextStyle(
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(contacts[index]['number']!),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.phone),
-                          ),
-                        ],
-                      ),
-                    ),
                   );
+                  ;
                 },
               ),
             )
